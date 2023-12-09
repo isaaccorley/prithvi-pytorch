@@ -1,0 +1,8 @@
+torch
+numpy
+omegaconf
+einops
+timm
+torchgeo
+tensorboard
+segmentation_models_pytorch
