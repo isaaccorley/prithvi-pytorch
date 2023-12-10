@@ -4,7 +4,6 @@
 
 This repository provides implementations which extends the Prithvi MAE remote sensing foundation model from the paper ["Foundation Models for Generalist Geospatial Artificial Intelligence", Jakubik et al.](https://arxiv.org/abs/2310.18660) for use as a ViT classifier and a U-Net segmentation model to train with the [TorchGeo](https://github.com/microsoft/torchgeo) library.
 
-
 ### Models
 
 #### ViT Classifier
@@ -86,8 +85,7 @@ wget https://huggingface.co/ibm-nasa-geospatial/Prithvi-100M/resolve/main/Prithv
 ### Examples
 
 - `train_eurosat.ipynb` provides an example of how to train PrithviViT classifier on EuroSAT using `torchgeo`
-- `train_hls_burn_scars.ipynb` provides an example of how to train PrithviUnet segmentation on HLS Burn Scars using `torchgeo` (coming soon)
-
+- `train_hls_burn_scars.ipynb` provides an example of how to train PrithviUnet segmentation on HLS Burn Scars using `torchgeo`
 
 ### Tests
 

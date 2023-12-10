@@ -1,8 +1,9 @@
-torch
-numpy
-omegaconf
-einops
-timm
-torchgeo
-tensorboard
-segmentation_models_pytorch
+torch>=2.1.1
+numpy>=1.26.2
+omegaconf>=2.3.0
+einops>=0.7.0
+timm>=0.9.2
+segmentation-models-pytorch>=0.3.3
+kornia>=0.7.0
+torchmetrics>=1.2.1
+torchgeo @ git+https://github.com/microsoft/torchgeo@main
