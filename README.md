@@ -1,8 +1,11 @@
 # prithvi-pytorch
 
-### Models
+![architecture](assets/arch.png)
 
-This repo extends the prithvi MAE pretrained model for use as a ViT classifier and a U-Net segmentation model
+This repository provides implementations which extends the Prithvi MAE remote sensing foundation model from the paper ["Foundation Models for Generalist Geospatial Artificial Intelligence", Jakubik et al.](https://arxiv.org/abs/2310.18660) for use as a ViT classifier and a U-Net segmentation model to train with the [TorchGeo](https://github.com/microsoft/torchgeo) library.
+
+
+### Models
 
 #### ViT Classifier
 
@@ -73,7 +76,7 @@ wget https://storage.googleapis.com/remote_sensing_representations/eurosat-test.
 
 ### Model Checkpoint
 
-Download the Prithvi model checkpoint
+Download the Prithvi model checkpoint and config
 
 ```bash
 wget https://huggingface.co/ibm-nasa-geospatial/Prithvi-100M/resolve/main/Prithvi_100M.pt?download=true -O Prithvi_100M.pt
