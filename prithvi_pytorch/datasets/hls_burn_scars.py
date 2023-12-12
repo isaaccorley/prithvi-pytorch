@@ -107,6 +107,7 @@ class HLSBurnScars(Dataset):
 
 class HLSBurnScarsDataModule(NonGeoDataModule):
     # mean/std taken from https://github.com/NASA-IMPACT/hls-foundation-os/blob/main/configs/burn_scars.py
+    """
     mean = torch.tensor(
         [
             0.033349706741586264,
@@ -127,8 +128,11 @@ class HLSBurnScarsDataModule(NonGeoDataModule):
             0.07241979477437814,
         ]
     )
+    """
+    mean = torch.zeros(6)
+    std = torch.ones(6)
 
-    image_size = (512, 512)
+    image_size = (224, 224)
 
     def __init__(
         self,
@@ -141,16 +145,21 @@ class HLSBurnScarsDataModule(NonGeoDataModule):
         )
 
         self.train_aug = AugmentationSequential(
+            K.Resize(size=self.image_size),
             K.Normalize(mean=self.mean, std=self.std),
             K.RandomHorizontalFlip(p=0.5),
             K.RandomVerticalFlip(p=0.5),
             data_keys=["image", "mask"],
         )
         self.val_aug = AugmentationSequential(
-            K.Normalize(mean=self.mean, std=self.std), data_keys=["image", "mask"]
+            K.Resize(size=self.image_size),
+            K.Normalize(mean=self.mean, std=self.std),
+            data_keys=["image", "mask"],
         )
         self.test_aug = AugmentationSequential(
-            K.Normalize(mean=self.mean, std=self.std), data_keys=["image", "mask"]
+            K.Resize(size=self.image_size),
+            K.Normalize(mean=self.mean, std=self.std),
+            data_keys=["image", "mask"],
         )
 
     def setup(self, stage: str) -> None:

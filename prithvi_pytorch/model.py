@@ -8,6 +8,7 @@ from omegaconf import OmegaConf
 from segmentation_models_pytorch import Unet
 from segmentation_models_pytorch.decoders.unet.decoder import UnetDecoder
 
+from .decoder import ConvTransformerTokensToEmbeddingNeck
 from .encoder import MaskedAutoencoderViT
 
 BANDS = ["B02", "B03", "B04", "B05", "B06", "B07"]
@@ -208,3 +209,50 @@ class PrithviUnet(Unet):
             for i in [2 ** (i + 1) for i in range(len(self.n))]
         ]
         return [s // num_tokens for s in sizes]
+
+
+class PrithviEncoderDecoder(nn.Module):
+    def __init__(
+        self,
+        num_classes: int,
+        cfg_path: str,
+        ckpt_path: Optional[str] = None,
+        in_chans: int = 6,
+        img_size: int = 224,
+        freeze_encoder: bool = False,
+        num_neck_filters: int = 32,
+    ):
+        super().__init__()
+        self.num_classes = num_classes
+        self.encoder = PrithviEncoder(
+            ckpt_path=ckpt_path,
+            cfg_path=cfg_path,
+            num_frames=1,
+            in_chans=in_chans,
+            img_size=img_size,
+        )
+        if freeze_encoder:
+            self.encoder.eval()
+            for param in self.encoder.parameters():
+                param.requires_grad = False
+
+        num_tokens = self.encoder.img_size // self.encoder.patch_size
+        self.decoder = ConvTransformerTokensToEmbeddingNeck(
+            embed_dim=self.encoder.embed_dim,
+            output_embed_dim=num_neck_filters,
+            Hp=num_tokens,
+            Wp=num_tokens,
+            drop_cls_token=True,
+        )
+        self.head = nn.Conv2d(
+            in_channels=num_neck_filters,
+            out_channels=num_classes,
+            kernel_size=3,
+            padding=1,
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.encoder(x)
+        x = self.decoder(x)
+        x = self.head(x)
+        return x

@@ -27,6 +27,27 @@ x = torch.rand(2, 6, 224, 224)  # (b, c, h, w)
 y_pred = model(x) # (2, 10) (b, num_classes)
 ```
 
+#### Encoder Decoder Segmentation Model
+
+Following the [MMSegmentation implementation](https://github.com/NASA-IMPACT/hls-foundation-os/geospatial_fm/geospatial_fm.py) by the authors, we adapt the `ConvTransformerTokensToEmbeddingNeck` decoder to work outside of MMSegmentation. This creates a simple Encoder Decoder network which takes the output embeddings of the Encoder and progressively upsamples them using Conv2dTranspose layers.
+
+```python
+import torch
+from prithvi_pytorch import PrithviUnet
+
+model = PrithviUnet(
+    ckpt_path=ckpt_path,  # path to pretrained checkpoint Prithvi_100M.pt
+    cfg_path=cfg_path,  # path to pretrained config Prithvi_100M_config.yaml
+    num_classes=10,  # num classifier classes
+    in_chans=6,  # right now only supports the pretrained 6 channels
+    img_size=224,  # supports other image sizes than 224
+    freeze_encoder=True  # freeze the pretrained prithvi
+)
+
+x = torch.rand(2, 6, 224, 224)  # (b, c, h, w)
+y_pred = model(x) # (2, 10, 224, 224) (b, num_classes, h, w)
+```
+
 #### U-Net Segmentation Model
 
 The U-Net implementation grabs `n` intermediate transformer block features and then upsamples them to be passed to U-Net decoder blocks using the `segmentation_models_pytorch` library. This is similar to the implementation in the ["Benchmarking Detection Transfer Learning with Vision Transformers"](https://arxiv.org/abs/2111.11429) paper.

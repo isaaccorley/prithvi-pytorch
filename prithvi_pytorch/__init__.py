@@ -1,1 +1,2 @@
-from .model import PrithviEncoder, PrithviUnet, PrithviViT
+from .model import (PrithviEncoder, PrithviEncoderDecoder, PrithviUnet,
+                    PrithviViT)
