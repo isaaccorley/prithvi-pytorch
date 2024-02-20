@@ -35,7 +35,7 @@ Following the [MMSegmentation implementation](https://github.com/NASA-IMPACT/hls
 import torch
 from prithvi_pytorch import PrithviUnet
 
-model = PrithviUnet(
+model = PrithviEncoderDecoder(
     ckpt_path=ckpt_path,  # path to pretrained checkpoint Prithvi_100M.pt
     cfg_path=cfg_path,  # path to pretrained config Prithvi_100M_config.yaml
     num_classes=10,  # num classifier classes
